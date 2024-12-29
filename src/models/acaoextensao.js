@@ -24,7 +24,7 @@ module.exports = (sequelize, DataTypes) => {
       
       // Relacionamento muitos para muitos com Usuário através da tabela de junção
       AcaoExtensao.belongsToMany(models.Usuario, {
-        through: models.AcaoExtensaousuario, 
+        through: models.AcaoExtensaoUsuario, 
         foreignKey: 'acaoExtensaoId', 
         as: 'membros',  
       });

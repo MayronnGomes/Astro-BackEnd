@@ -18,7 +18,7 @@ module.exports = (sequelize, DataTypes) => {
 
       // Relacionamento muitos para muitos com Usuario através da tabela de junção
       Atividade.belongsToMany(models.Usuario, {
-        through: models.AtividadeUsuario, 
+        through: models.AtividadesUsuario, 
         foreignKey: 'atividadeId',  
         as: 'usuarios',  
       });
