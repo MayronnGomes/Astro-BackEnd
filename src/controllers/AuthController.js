@@ -33,21 +33,23 @@ module.exports = {
                 if (!usuario)
                     return res.status(404).json({ errors: [{ msg: "Credenciais inválidas"}] });
                 
-                let passwordIsValid = bcrypt.compareSync(senha, user.senha);
-
+                // adicionar bcrypt !!!
+                let passwordIsValid = senha === usuario.senha ? true : false
+                
                 if (!passwordIsValid)
                     return res.status(401).json({ errors: [{ msg: "Credenciais inválidas" }] });
 
                 let token = jwt.sign({ id: user.id }, auth.secret, {
                     expiresIn: 86400
                 });
-
+                
                 res.status(200).json({
                     message: 'Login bem-sucedido',
-                    id: user.id,
-                    nome: user.nome,
+                    id: usuario.id,
+                    nome: usuario.nome,
                     token: token
                 });
+
     
             } catch (error) {
                 return res.status(500).json({ errors: [{ msg: 'Erro interno do servidor' }] });
