@@ -1,88 +1,126 @@
 {
     "ufcRussas": {
-        "usuários": [
-            {
-                "Nome": "xxxxxxx",
-                "E-mail": "xxxx",
-                "User": "XXXXXX",
-                "Senha": "xxxxxx",
-                "Tipo": "xxxxxxx",
-                "CPF": "XXXXXXXXXXX",
-                "Status": "ativo"
-            },
-            {
-                "Nome": "xxxxxxx",
-                "E-mail": "xxxx",
-                "User": "XXXXXX",
-                "Senha": "xxxxxx",
-                "Tipo": "xxxxxxx",
-                "CPF": "XXXXXXXXXXX",
-                "Status": "inativo"
-            },
-            {
-                "Nome": "xxxxxxx",
-                "E-mail": "xxxx",
-                "User": "XXXXXX",
-                "Senha": "xxxxxx",
-                "Tipo": "xxxxxxx",
-                "CPF": "XXXXXXXXXXX",
-                "Status": "ativo"
-            }
-        ],
-        "açõesExt": {
-            "Programa": {
-                "Exemplo1": {
-                    "Descrição": "ex",
-                    "Data_criação": "XX/XX/XXXX",
-                    "Data_atualização": "XX/XX/XXXX",
-                    "Status": "ex",
-                    "Siape_Coord": "XXXXXX",
-                    "Membros": ["XXXXXX", "XXXXXX", "XXXXXX"]
+        "Data_atualização": "XX/XX/XXXX",
+        "Usuario": {
+            "Data_atualização": "XX/XX/XXXX",
+            "Usuarios": [
+                {
+                    "Nome": "xxxxxxx",
+                    "E-mail": "xxxxxxxx",
+                    "User": "xxxxxxx",
+                    "Senha": "xxxxxx",
+                    "Tipo": "xxxxxxx",
+                    "CPF": "",
+                    "Status": "xxxxxxxx",
+                    "Data_atualização": "XX/XX/XXXX"
+                },
+                {
+                    "Nome": "xxxxxxxxx",
+                    "E-mail": "xxxxxxxxx",
+                    "User": "xxxxxxxx",
+                    "Senha": "xxxxxxx",
+                    "Tipo": "xxxxxxx",
+                    "CPF": "",
+                    "Status": "xxxxxxx",
+                    "Data_atualização": "XX/XX/XXXX"
                 }
+            ]
+        },
+        "açõesxxxxxxt": {
+            "Data_atualização": "XX/XX/XXXX",
+            "Programa": {
+                "Data_atualização": "XX/XX/XXXX",
+                "Programas": [
+                    {
+                        "Nome": "xxxxxx",
+                        "Descrição": "xxxxxx",
+                        "Status": "xxxxxx",
+                        "Siape_Coord": "XXXXXX",
+                        "Membros": [
+                            "XXXXXX",
+                            "XXXXXX",
+                            "XXXXXX"
+                        ],
+                        "Data_criação": "XX/XX/XXXX",
+                        "Data_atualização": "XX/XX/XXXX"
+                    }
+                ]
             },
             "Projeto": {
-                "Nerds": {
-                    "Descrição": "ex",
-                    "Data_criação": "XX/XX/XXXX",
-                    "Data_atualização": "XX/XX/XXXX",
-                    "Status": "ex",
-                    "Siape_Coord": "XXXXXX",
-                    "Membros": ["XXXXXX", "XXXXXX", "XXXXXX"],
-                    "nome_ação_pai": "XXXXXX"
-                }
+                "Data_atualização": "XX/XX/XXXX",
+                "Projetos": [
+                    {
+                        "Nome": "xxxxxxx",
+                        "Descrição": "xxxxx",
+                        "Status": "xxxxx",
+                        "Siape_Coord": "XXXXXX",
+                        "Membros": [
+                            "XXXXXX",
+                            "XXXXXX",
+                            "XXXXXX"
+                        ],
+                        "nome_ação_pai": "XXXXXX",
+                        "Data_criação": "XX/XX/XXXX",
+                        "Data_atualização": "XX/XX/XXXX"
+                    }
+                ]
             },
-            "Cursos": {
-                "Ex": {
-                    "Descrição": "ex",
-                    "Data_criação": "XX/XX/XXXX",
-                    "Data_atualização": "XX/XX/XXXX",
-                    "Status": "ex",
-                    "Siape_Coord": "XXXXXX",
-                    "Membros": ["XXXXXX", "XXXXXX", "XXXXXX"],
-                    "nome_ação_pai": "XXXXXX"
-                }
+            "Curso": {
+                "Data_atualização": "XX/XX/XXXX",
+                "Cursos": [
+                    {
+                        "Nome": "xxxxx",
+                        "Descrição": "xxxxxx",
+                        "Status": "xxxxxx",
+                        "Siape_Coord": "XXXXXX",
+                        "Membros": [
+                            "XXXXXX",
+                            "XXXXXX",
+                            "XXXXXX"
+                        ],
+                        "nome_ação_pai": "XXXXXX",
+                        "Data_criação": "XX/XX/XXXX",
+                        "Data_atualização": "XX/XX/XXXX"
+                    }
+                ]
             },
-            "Eventos": {
-                "Ex": {
-                    "Descrição": "ex",
-                    "Data_criação": "XX/XX/XXXX",
-                    "Data_atualização": "XX/XX/XXXX",
-                    "Status": "ex",
-                    "Siape_Coord": "XXXXXX",
-                    "Membros": ["XXXXXX", "XXXXXX", "XXXXXX"],
-                    "nome_ação_pai": "XXXXXX"
-                }
+            "Evento": {
+                "Data_atualização": "XX/XX/XXXX",
+                "Eventos": [
+                    {
+                        "Nome": "xxxxxx",
+                        "Descrição": "xxxxxx",
+                        "Status": "xxxxxx",
+                        "Siape_Coord": "XXXXXX",
+                        "Membros": [
+                            "XXXXXX",
+                            "XXXXXX",
+                            "XXXXXX"
+                        ],
+                        "nome_ação_pai": "XXXXXX",
+                        "Data_criação": "XX/XX/XXXX",
+                        "Data_atualização": "XX/XX/XXXX"
+                    }
+                ]
             },
             "Prestação de Serviços": {
-                "Ex": {
-                    "Descrição": "ex",
-                    "Data_criação": "XX/XX/XXXX",
-                    "Data_atualização": "XX/XX/XXXX",
-                    "Status": "ex",
-                    "Siape_Coord": "XXXXXX",
-                    "Membros": ["XXXXXX", "XXXXXX", "XXXXXX"],
-                    "nome_ação_pai": "XXXXXX"
-                }
+                "Data_atualização": "XX/XX/XXXX",
+                "Prestações de Serviços": [
+                    {
+                        "Nome": "xxxxxx",
+                        "Descrição": "xxxxxx",
+                        "Status": "xxxxxx",
+                        "Siape_Coord": "XXXXXX",
+                        "Membros": [
+                            "XXXXXX",
+                            "XXXXXX",
+                            "XXXXXX"
+                        ],
+                        "nome_ação_pai": "XXXXXX",
+                        "Data_criação": "XX/XX/XXXX",
+                        "Data_atualização": "XX/XX/XXXX"
+                    }
+                ]
             }
         }
     }
