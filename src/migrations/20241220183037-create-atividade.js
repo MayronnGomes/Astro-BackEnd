@@ -30,6 +30,10 @@ module.exports = {
       status: {
         type: Sequelize.STRING
       },
+      prioridade: {  
+        type: Sequelize.STRING, 
+        allowNull: true,
+      },
       acaoExtensaoId: {
         type: Sequelize.INTEGER,
         allowNull: false,

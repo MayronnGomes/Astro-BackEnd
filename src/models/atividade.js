@@ -32,6 +32,7 @@ module.exports = (sequelize, DataTypes) => {
     dataFim: DataTypes.DATE,
     local: DataTypes.STRING,
     status: DataTypes.STRING,
+    prioridade: DataTypes.STRING,
     acaoExtensaoId: {
       type: DataTypes.INTEGER,
       allowNull: false, 
@@ -43,6 +44,7 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     sequelize,
     modelName: 'Atividade',
+    tableName: 'Atividade',
   });
   return Atividade;
 };
