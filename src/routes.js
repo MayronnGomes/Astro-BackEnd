@@ -15,5 +15,6 @@ routes.post('/atividadesStatus/:id', AtividadesController.updateStatus.handler)
 // Rotas de Usuários
 routes.post('/userCreate', UserController.create.handler)
 routes.get('/membros/:id', UserController.getAll.handler);
+routes.delete('/membros/:id', UserController.delete.handler);
 
 module.exports = routes;

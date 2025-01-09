@@ -15,7 +15,7 @@ module.exports = {
                 const atividades = await AtividadesUsuarios.findAll({
                     where: { userId: id_user },
                     include: [{
-                        model: Atividade, 
+                        model: Atividade,
                         as: 'atividade',
                     }]
                 });
@@ -45,22 +45,24 @@ module.exports = {
             try {
 
                 const { id } = req.params;
-                                
+
                 const membros = await AcaoExtensaoUsuario.findAll({
                     where: { acaoExtensaoId: id },
                     include: [{
-                        model: User, 
+                        model: User,
                         as: 'usuarios',
-                        attributes: ['id', 'nome', 'email'],
+                        attributes: ['id', 'nome', 'email', 'tipoUsuario', 'status'],
                     }]
                 });
 
                 if (membros.length > 0) {
 
                     const membrosDetalhados = membros.map(membro => ({
-                        id: membro.usuarios.id,     
-                        nome: membro.usuarios.nome, 
+                        id: membro.usuarios.id,
+                        nome: membro.usuarios.nome,
                         email: membro.usuarios.email,
+                        tipoUsuario: membro.usuarios.tipoUsuario,
+                        status: membro.usuarios.status,
                     }));
 
                     res.status(200).json({
@@ -118,4 +120,31 @@ module.exports = {
 
     },
 
+    delete: {
+        handler: async (req, res) => {
+
+            try {
+
+                const { id } = req.params;
+
+                const user = await User.findByPk(id);
+
+                if (!user) {
+                    return res.status(404).json({
+                        errors: [{ msg: 'Usuário não encontrado' }]
+                    });
+                }
+
+                await user.destroy();
+
+                res.status(200).json({
+                    msg: 'Usuário excluído com sucesso!'
+                });
+
+            } catch (error) {
+                return res.status(500).json({ errors: [{ msg: 'Erro interno do servidor' }] });
+            }
+
+        }
+    },
 }
