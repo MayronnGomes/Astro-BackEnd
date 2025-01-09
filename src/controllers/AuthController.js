@@ -33,8 +33,7 @@ module.exports = {
                 if (!usuario)
                     return res.status(404).json({ errors: [{ msg: "Credenciais inválidas"}] });
                 
-                // adicionar bcrypt !!!
-                let passwordIsValid = senha === usuario.senha ? true : false
+                let passwordIsValid = bcrypt.compareSync(senha, usuario.senha);
                 
                 if (!passwordIsValid)
                     return res.status(401).json({ errors: [{ msg: "Credenciais inválidas" }] });
