@@ -42,10 +42,11 @@ module.exports = {
         handler: async (req, res) => {
 
             try {
-                const { nome, descricao, tempoDuracao, dataInicio, dataFim, local, status, userId } = req.body;
+                const { nome, descricao, tempoDuracao, dataInicio, dataFim, local, status, userId, membros } = req.body;
+                membros.push(userId);
                 const acaoExtensaoId = 1 // Pegar o id da ação de extensão
 
-                if (!nome || !descricao || !tempoDuracao || !dataInicio || !dataFim || !local || !status || !acaoExtensaoId || !userId) {
+                if (!nome || !descricao || !tempoDuracao || !dataInicio || !dataFim || !local || !status || !acaoExtensaoId || !membros) {
                     return res.status(400).json({ errors: [{ msg: 'Todos os campos são obrigatórios' }] });
                 }
 
@@ -62,11 +63,14 @@ module.exports = {
                     updatedAt: new Date(),
                 });
 
-                await AtividadesUsuarios.create({
-                    userId: userId,
-                    atividadeId: novaAtividade.id,
-                });
-
+                for (const membro of membros) {  
+                    await AtividadesUsuarios.create({
+                        userId: membro,
+                        atividadeId: novaAtividade.id,
+                    });
+                }
+                
+                
                 res.status(201).json({
                     msg: 'Atividade criada com sucesso!',
                     atividade: novaAtividade,
@@ -85,8 +89,6 @@ module.exports = {
             try {
                 const prioridade = req.body.prioridade
                 const id = req.params.id
-
-                console.log(prioridade, id)
 
                 const resultado = await Atividade.update(
                     { prioridade: prioridade },
