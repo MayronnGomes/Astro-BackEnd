@@ -92,6 +92,15 @@ module.exports = {
                     return res.status(400).json({ errors: [{ msg: 'Todos os campos são obrigatórios' }] });
                 }
 
+                const usuarioExists = await User.findOne({
+                    where: { cpf: cpf }
+                })
+                console.log(usuarioExists)
+
+                if (usuarioExists){
+                console.log('aq')
+                    return res.status(400).json({ errors: [{ msg: 'Já existe um usuário cadastrado com este CPF' }] });
+                }
                 const novoUsuario = await User.create({
                     nome,
                     email,
@@ -112,6 +121,7 @@ module.exports = {
                 res.status(201).json({
                     msg: 'Usuário cadastrado com sucesso!',
                 });
+
             } catch (error) {
                 console.error("Erro ao cadastrar usuário:", error);
                 return res.status(500).json({ errors: [{ msg: 'Erro interno ao cadastrar usuário' }] });

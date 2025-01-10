@@ -6,6 +6,7 @@ const UserController = require("./controllers/UserController")
 
 // Rotas de Autenticação
 routes.post('/login', [AuthController.login.validations], AuthController.login.handler);
+routes.post('/login-external', [AuthController.login_external.validations], AuthController.login_external.handler);
 
 // Rotas Atividades
 routes.get('/atividades/:id_user', AtividadesController.get.handler);
