@@ -88,23 +88,21 @@ module.exports = {
                 const { nome, email, senha, cpf } = req.body;
                 const acaoExtensaoId = 1 //pegar id da ação de extensão
 
-                if (!nome || !email || !senha || !cpf || !acaoExtensaoId) {
-                    return res.status(400).json({ errors: [{ msg: 'Todos os campos são obrigatórios' }] });
+                if (!nome || !email || !senha || !acaoExtensaoId) {
+                    return res.status(400).json({ errors: [{ msg: 'Os campos "Nome", "Email" e "Senha" são obrigatórios' }] });
                 }
 
                 const usuarioExists = await User.findOne({
-                    where: { cpf: cpf }
+                    where: { email }
                 })
-                console.log(usuarioExists)
 
                 if (usuarioExists){
-                console.log('aq')
                     return res.status(400).json({ errors: [{ msg: 'Já existe um usuário cadastrado com este CPF' }] });
                 }
                 const novoUsuario = await User.create({
                     nome,
                     email,
-                    user: cpf,
+                    user: email,
                     senha: bcrypt.hashSync(senha, 8),
                     tipoUsuario: "externo",
                     status: 1,
