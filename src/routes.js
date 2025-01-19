@@ -10,7 +10,7 @@ routes.post('/login', [AuthController.login.validations], AuthController.login.h
 routes.post('/login-external', [AuthController.login_external.validations], AuthController.login_external.handler);
 
 // Rotas Atividades
-routes.get('/atividades/:id_user', AtividadesController.get.handler);
+routes.get('/atividades/:id_user:id_acao', AtividadesController.get.handler);
 routes.post('/atividades', AtividadesController.create.handler)
 routes.post('/atividadesStatus/:id', AtividadesController.updateStatus.handler)
 

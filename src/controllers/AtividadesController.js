@@ -9,13 +9,16 @@ module.exports = {
 
             try {
 
-                const { id_user } = req.params;
+                const { id_user, id_acao } = req.params;
 
                 const atividades = await AtividadesUsuarios.findAll({
                     where: { userId: id_user },
                     include: [{
                         model: Atividade, 
                         as: 'atividade',
+                        where: {
+                            acaoExtensaoId: id_acao
+                          }
                     }]
                 });
 
