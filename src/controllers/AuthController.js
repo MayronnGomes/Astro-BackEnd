@@ -46,6 +46,7 @@ module.exports = {
                     message: 'Login bem-sucedido',
                     id: usuario.id,
                     nome: usuario.nome,
+                    tipo: usuario.tipoUsuario,
                     token: token
                 });
 
@@ -96,6 +97,7 @@ module.exports = {
                     message: 'Login bem-sucedido',
                     id: usuario.id,
                     nome: usuario.nome,
+                    tipo: usuario.tipoUsuario,
                     token: token
                 });
 
