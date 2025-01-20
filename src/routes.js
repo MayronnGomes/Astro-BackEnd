@@ -11,13 +11,14 @@ routes.post('/login-external', [AuthController.login_external.validations], Auth
 
 // Rotas Atividades
 routes.get('/atividades/:id_user:id_acao', AtividadesController.get.handler);
+routes.get('/atividadesCoord/:id_acao', AtividadesController.getAll.handler);
 routes.post('/atividades', AtividadesController.create.handler)
 routes.post('/atividadesStatus/:id', AtividadesController.updateStatus.handler)
 
 // Rotas de Usuários
 routes.post('/userCreate', UserController.create.handler)
 routes.get('/membros/:id', UserController.getAll.handler);
-routes.delete('/membros/:id', UserController.delete.handler);
+routes.delete('/membros/:id:acaoId', UserController.delete.handler);
 
 // Rotas de Ações de Extensão
 routes.get('/acoesExtensao/:id_user', AcoesExtensaoController.get.handler);

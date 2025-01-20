@@ -41,15 +41,43 @@ module.exports = {
         }
     },
 
+    getAll: {
+        handler: async (req, res) => {
+
+            try {
+
+                
+                const { id_acao } = req.params;
+                
+                console.log('\naq', id_acao)
+                const atividades = await Atividade.findAll({
+                    where: { acaoExtensaoId: id_acao },
+                });
+
+                if (atividades.length > 0) {
+                    res.status(200).json({
+                        atividades: atividades
+                    });
+                } else {
+                    res.status(200).json({
+                        atividades: []
+                    });
+                }
+
+            } catch (error) {
+                return res.status(500).json({ errors: [{ msg: 'Erro interno do servidor' }] });
+            }
+
+        }
+    },
+
     create: {
         handler: async (req, res) => {
 
             try {
-                const { nome, descricao, tempoDuracao, dataInicio, dataFim, local, status, userId, membros } = req.body;
-                membros.push(userId);
-                const acaoExtensaoId = 1 // Pegar o id da ação de extensão
+                const { nome, descricao, tempoDuracao, dataInicio, dataFim, local, status, membros, acaoId } = req.body;
 
-                if (!nome || !descricao || !tempoDuracao || !dataInicio || !dataFim || !local || !status || !acaoExtensaoId || !membros) {
+                if (!nome || !descricao || !tempoDuracao || !dataInicio || !dataFim || !local || !status || !acaoId || !membros) {
                     return res.status(400).json({ errors: [{ msg: 'Todos os campos são obrigatórios' }] });
                 }
 
@@ -61,7 +89,7 @@ module.exports = {
                     dataFim,
                     local,
                     status,
-                    acaoExtensaoId,
+                    acaoExtensaoId: acaoId,
                     createdAt: new Date(),
                     updatedAt: new Date(),
                 });

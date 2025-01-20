@@ -61,7 +61,6 @@ module.exports = {
                 }
 
             } catch (error) {
-                z
                 return res.status(500).json({ errors: [{ msg: 'Erro interno do servidor' }] });
             }
 
