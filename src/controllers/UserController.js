@@ -1,7 +1,8 @@
 const db = require("../database");
 const bcrypt = require("bcryptjs");
 const User = db.Usuario;
-const AcaoExtensaoUsuario = db.AcaoExtensaoUsuario
+const AcaoExtensao = db.AcaoExtensao;
+const AcaoExtensaoUsuario = db.AcaoExtensaoUsuario;
 
 module.exports = {
 
@@ -96,7 +97,7 @@ module.exports = {
                     where: { email }
                 })
 
-                if (usuarioExists){
+                if (usuarioExists) {
                     return res.status(400).json({ errors: [{ msg: 'Já existe um usuário cadastrado com este CPF' }] });
                 }
                 const novoUsuario = await User.create({
@@ -133,7 +134,7 @@ module.exports = {
 
             try {
 
-                const { id } = req.params;
+                const { id, acaoId } = req.params;
 
                 const user = await User.findByPk(id);
 
@@ -142,8 +143,30 @@ module.exports = {
                         errors: [{ msg: 'Usuário não encontrado' }]
                     });
                 }
+                
+                const acao = await AcaoExtensao.findByPk(acaoId);
+                
+                if (!acao) {
+                    return res.status(404).json({
+                        errors: [{ msg: 'Ação não encontrada' }]
+                    });
+                }
+                
+                const exist = await AcaoExtensaoUsuario.findOne({
+                    where: { acaoExtensaoId: acaoId, userId: id }
+                })
+                console.log('\naq', exist)
+                
+                if (!exist) {
+                    return res.status(404).json({
+                        errors: [{ msg: 'Usuário não está como Membro da Ação de extensão' }]
+                    });
+                }
+                console.log('\naq')
 
-                await user.destroy();
+                await AcaoExtensaoUsuario.destroy({
+                    where: { acaoExtensaoId: acaoId, userId: id }
+                });
 
                 res.status(200).json({
                     msg: 'Usuário excluído com sucesso!'
