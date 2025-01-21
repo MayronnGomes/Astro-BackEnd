@@ -27,5 +27,6 @@ routes.get('/acoesExtensao/:id_user', AcoesExtensaoController.get.handler);
 // Rotas de Notificações
 routes.get('/notifications/:id_user', NotificationsController.get.handler);
 routes.post('/notificationsStatus/:id', NotificationsController.updateStatus.handler)
+routes.delete('/notifications/:id', NotificationsController.delete.handler);
 
 module.exports = routes;

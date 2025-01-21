@@ -87,6 +87,36 @@ module.exports = {
                 return res.status(500).json({ errors: [{ msg: 'Erro ao atualizar o Status' }] });
             }
         }
-    }
+    },
+
+    delete: {
+        handler: async (req, res) => {
+
+            try {
+
+                const { id } = req.params;
+
+                const notificacao = await Notificacoes.findByPk(id);
+
+                if (!notificacao) {
+                    return res.status(404).json({
+                        errors: [{ msg: 'Notificação não encontrado' }]
+                    });
+                }
+
+                await Notificacoes.destroy({
+                    where: { id }
+                });
+
+                res.status(200).json({
+                    msg: 'Notificação excluída com sucesso!'
+                });
+
+            } catch (error) {
+                return res.status(500).json({ errors: [{ msg: 'Erro interno do servidor' }] });
+            }
+
+        }
+    },
 
 }
