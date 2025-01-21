@@ -29,7 +29,13 @@ async function setupDatabase() {
     await sequelize.authenticate();  // Reautenticar com o banco de dados correto
 
     // Rodar as migrations para criar as tabelas
+    console.log('Executando migrations...');
     execSync('npx sequelize-cli db:migrate');
+
+    // Rodar os seeds para popular o banco de dados
+    console.log('Executando seeds...');
+    execSync('npx sequelize-cli db:seed:all');
+    
   } catch (error) {
     console.error('Erro durante a configuração do banco de dados:', error);
   } finally {

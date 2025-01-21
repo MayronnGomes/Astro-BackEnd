@@ -22,6 +22,12 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'atividadeId',  
         as: 'usuarios',  
       });
+
+      // Relacionamento um para muitos com Notificações
+      Atividade.hasMany(models.Notificacoes, {
+        foreignKey: 'acaoExtensaoId',
+        as: 'notificacoes',
+      });
     }
   }
   Atividade.init({
@@ -37,7 +43,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       allowNull: false, 
       references: {
-        model: 'AcaoExtensaos',  
+        model: 'AcaoExtensao',  
         key: 'id',  
       },
     },

@@ -35,6 +35,12 @@ module.exports = (sequelize, DataTypes) => {
         as: 'atividades', 
       });
 
+      // Relacionamento um para muitos com Notificações
+      AcaoExtensao.hasMany(models.Notificacoes, {
+        foreignKey: 'acaoExtensaoId',
+        as: 'notificacoes',
+      });
+
     }
   }
   AcaoExtensao.init({

@@ -4,6 +4,7 @@ const AuthController = require("./controllers/AuthController");
 const AtividadesController = require("./controllers/AtividadesController");
 const UserController = require("./controllers/UserController")
 const AcoesExtensaoController = require("./controllers/AcoesExtensaoController")
+const NotificationsController = require("./controllers/NotificationsController");
 
 // Rotas de Autenticação
 routes.post('/login', [AuthController.login.validations], AuthController.login.handler);
@@ -22,5 +23,9 @@ routes.delete('/membros/:id:acaoId', UserController.delete.handler);
 
 // Rotas de Ações de Extensão
 routes.get('/acoesExtensao/:id_user', AcoesExtensaoController.get.handler);
+
+// Rotas de Notificações
+routes.get('/notifications/:id_user', NotificationsController.get.handler);
+routes.post('/notificationsStatus/:id', NotificationsController.updateStatus.handler)
 
 module.exports = routes;
