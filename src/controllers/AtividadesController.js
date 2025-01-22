@@ -1,6 +1,7 @@
 const db = require("../database");
 const Atividade = db.Atividade;
 const AtividadesUsuarios = db.AtividadesUsuario;
+const Notificacoes = db.Notificacoes
 
 module.exports = {
 
@@ -99,8 +100,18 @@ module.exports = {
                         userId: membro,
                         atividadeId: novaAtividade.id,
                     });
+
+                    await Notificacoes.create({
+                        acaoExtensaoId: acaoId,
+                        atividadeId: novaAtividade.id,
+                        userId: membro,
+                        tipo: 'criado',
+                        status: 'não Lida',
+                        createdAt: new Date(new Date().getTime() - 3 * 60 * 60 * 1000),
+                        updatedAt: new Date(new Date().getTime() - 3 * 60 * 60 * 1000),
+                    })
+
                 }
-                
                 
                 res.status(201).json({
                     msg: 'Atividade criada com sucesso!',
