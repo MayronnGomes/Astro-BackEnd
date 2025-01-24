@@ -15,6 +15,8 @@ routes.get('/atividades/:id_user:id_acao', AtividadesController.get.handler);
 routes.get('/atividadesCoord/:id_acao', AtividadesController.getAll.handler);
 routes.post('/atividades', AtividadesController.create.handler)
 routes.post('/atividadesStatus/:id', AtividadesController.updateStatus.handler)
+routes.post('/atividadeUpdate', AtividadesController.update.handler)
+routes.delete('/atividade/:id:acaoId', AtividadesController.delete.handler);
 
 // Rotas de Usuários
 routes.post('/userCreate', UserController.create.handler)

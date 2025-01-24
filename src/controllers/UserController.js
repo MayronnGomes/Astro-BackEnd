@@ -9,47 +9,12 @@ const Notificacoes = db.Notificacoes;
 
 module.exports = {
 
-    get: {
-        handler: async (req, res) => {
-
-            try {
-
-                const { id_user } = req.params;
-
-                const atividades = await AtividadesUsuarios.findAll({
-                    where: { userId: id_user },
-                    include: [{
-                        model: Atividade,
-                        as: 'atividade',
-                    }]
-                });
-
-                if (atividades.length > 0) {
-                    const atividadesDetalhadas = atividades.map(atividadeUsuario => atividadeUsuario.atividade);
-
-                    res.status(200).json({
-                        atividades: atividadesDetalhadas
-                    });
-                } else {
-                    res.status(200).json({
-                        atividades: []
-                    });
-                }
-
-            } catch (error) {
-                return res.status(500).json({ errors: [{ msg: 'Erro interno do servidor' }] });
-            }
-
-        }
-    },
-
     getAll: {
         handler: async (req, res) => {
 
             try {
 
                 const { id } = req.params;
-                console.log('\n\naq', id)
 
                 const membros = await AcaoExtensaoUsuario.findAll({
                     where: { acaoExtensaoId: id },
