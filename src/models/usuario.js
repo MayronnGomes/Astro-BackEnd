@@ -30,6 +30,12 @@ module.exports = (sequelize, DataTypes) => {
         as: 'notificacoes',
       });
 
+      // Relacionamento um para muitos com Histórico de Mensagens
+      Usuario.hasMany(models.HistoricoMensagens, {
+        foreignKey: 'idUser',  
+        as: 'historicoUser',  
+      });
+
     }
   }
   Usuario.init({

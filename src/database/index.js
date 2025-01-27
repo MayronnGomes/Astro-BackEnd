@@ -12,6 +12,7 @@ db.Atividade = require('../models/atividade')(connection, Sequelize.DataTypes);
 db.AtividadesUsuario = require('../models/atividadesusuario')(connection, Sequelize.DataTypes);
 db.Usuario = require('../models/usuario')(connection, Sequelize.DataTypes);
 db.Notificacoes = require('../models/notificacoes')(connection, Sequelize.DataTypes);
+db.HistoricoMensagens = require('../models/historicomensagens')(connection, Sequelize.DataTypes);
 
 // Associando os modelos
 Object.keys(db).forEach(modelName => {
