@@ -27,8 +27,61 @@ module.exports = {
                 });
 
                 if (atividades.length > 0) {
-                    const atividadesDetalhadas = atividades.map(atividadeUsuario => atividadeUsuario.atividade);
+                    const atividadesDetalhadas = [];
 
+                    for (const atividadeUsuario of atividades) {
+                        const atividade = atividadeUsuario.atividade;
+
+                        const mensagens = await HistoricoMensagens.findAll({
+                            where: { idAtividade: atividade.id },
+                            include: [{
+                                model: Usuario,
+                                as: 'usuario',
+                                attributes: ['id', 'nome'],
+                            }]
+                        });
+
+                        const msgs = mensagens.map(msg => ({
+                            id: msg.id,
+                            comentario: msg.comentario,
+                            usuario: msg.usuario,
+                            createdAt: msg.createdAt,
+                        }));
+
+                        const membrosAntigos = await AtividadesUsuarios.findAll({
+                            where: { atividadeId: atividade.id },
+                            include: [{
+                                model: Usuario,
+                                as: 'usuario',
+                                attributes: ['id', 'nome', 'email', 'tipoUsuario', 'status'],
+                            }]
+                        });
+
+                        const membros = await AcaoExtensaoUsuario.findAll({
+                            where: { acaoExtensaoId: id_acao },
+                            include: [{
+                                model: Usuario,
+                                as: 'usuarios',
+                                attributes: ['id', 'nome', 'email', 'tipoUsuario', 'status'],
+                            }]
+                        });
+
+                        const membrosantigos = membrosAntigos.map(membro => ({
+                            id: membro.usuario.id,
+                            nome: membro.usuario.nome,
+                            email: membro.usuario.email,
+                            tipoUsuario: membro.usuario.tipoUsuario,
+                            status: membro.usuario.status
+                        }));
+
+                        const usuarios = membros.map(membro => membro.usuarios)
+                        atividadesDetalhadas.push({
+                            ...atividade.toJSON(),
+                            msgs: msgs,
+                            usuarios: usuarios,
+                            membrosantigos: membrosantigos,
+                        });
+                    }
                     res.status(200).json({
                         atividades: atividadesDetalhadas
                     });
@@ -86,7 +139,7 @@ module.exports = {
                                 attributes: ['id', 'nome'],
                             }]
                         });
-    
+
                         const msgs = mensagens.map(msg => ({
                             id: msg.id,
                             comentario: msg.comentario,
