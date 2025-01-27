@@ -4,6 +4,7 @@ const AtividadesUsuarios = db.AtividadesUsuario;
 const Notificacoes = db.Notificacoes;
 const Usuario = db.Usuario;
 const AcaoExtensaoUsuario = db.AcaoExtensaoUsuario;
+const HistoricoMensagens = db.HistoricoMensagens;
 
 module.exports = {
 
@@ -77,11 +78,28 @@ module.exports = {
                             }]
                         });
 
+                        const mensagens = await HistoricoMensagens.findAll({
+                            where: { idAtividade: atividade.id },
+                            include: [{
+                                model: Usuario,
+                                as: 'usuario',
+                                attributes: ['id', 'nome'],
+                            }]
+                        });
+    
+                        const msgs = mensagens.map(msg => ({
+                            id: msg.id,
+                            comentario: msg.comentario,
+                            usuario: msg.usuario,
+                            createdAt: msg.createdAt,
+                        }));
+
                         const usuarios = membros.map(membro => membro.usuarios)
                         atividadesComMembros.push({
                             ...atividade.toJSON(),
                             membrosantigos: membrosAntigos.map(membro => membro.userId),
                             usuarios: usuarios,
+                            msgs: msgs,
                         });
                     }
 

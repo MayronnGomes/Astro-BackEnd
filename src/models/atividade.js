@@ -28,6 +28,12 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'acaoExtensaoId',
         as: 'notificacoes',
       });
+
+      // Relacionamento um para muitos com Histórico de Mensagens
+      Atividade.hasMany(models.HistoricoMensagens, {
+        foreignKey: 'idAtividade',  
+        as: 'historicoAtividade',  
+      });
     }
   }
   Atividade.init({

@@ -5,6 +5,7 @@ const AtividadesController = require("./controllers/AtividadesController");
 const UserController = require("./controllers/UserController")
 const AcoesExtensaoController = require("./controllers/AcoesExtensaoController")
 const NotificationsController = require("./controllers/NotificationsController");
+const HistoricoMensagensController = require("./controllers/HistoricoMensagensController");
 
 // Rotas de Autenticação
 routes.post('/login', [AuthController.login.validations], AuthController.login.handler);
@@ -30,5 +31,8 @@ routes.get('/acoesExtensao/:id_user', AcoesExtensaoController.get.handler);
 routes.get('/notifications/:id_user', NotificationsController.get.handler);
 routes.post('/notificationsStatus/:id', NotificationsController.updateStatus.handler)
 routes.delete('/notifications/:id', NotificationsController.delete.handler);
+
+// Rotas de Histórico de Mensagens
+routes.post('/mensagens', HistoricoMensagensController.create.handler)
 
 module.exports = routes;
