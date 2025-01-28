@@ -88,6 +88,7 @@ module.exports = {
                                 tipo: acao.tipo,
                                 parentId: acao.parentId,
                                 status: acao.status,
+                                descricao: acao.descricao,
                                 filhos,
                             };
                         })

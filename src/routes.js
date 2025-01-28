@@ -14,6 +14,7 @@ routes.post('/login-external', [AuthController.login_external.validations], Auth
 // Rotas Atividades
 routes.get('/atividades/:id_user:id_acao', AtividadesController.get.handler);
 routes.get('/atividadesCoord/:id_acao', AtividadesController.getAll.handler);
+routes.get('/atividadesRecentes/:id_user', AtividadesController.getRecentes.handler);
 routes.post('/atividades', AtividadesController.create.handler)
 routes.post('/atividadesStatus/:id', AtividadesController.updateStatus.handler)
 routes.post('/atividadeUpdate', AtividadesController.update.handler)
