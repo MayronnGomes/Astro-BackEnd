@@ -79,7 +79,7 @@ module.exports = {
                             ...atividade.toJSON(),
                             msgs: msgs,
                             usuarios: usuarios,
-                            membrosantigos: membrosantigos,
+                            membrosantigos: membrosantigos.map(membro => membro.id),
                         });
                     }
                     res.status(200).json({
