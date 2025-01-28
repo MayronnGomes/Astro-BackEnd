@@ -211,6 +211,20 @@ module.exports = {
                         updatedAt: new Date(new Date().getTime() - 3 * 60 * 60 * 1000),
                     })
 
+                    if (['cancelada', 'encerrada com antecipação', 'encerrada com pendência'].includes(novaAtividade.status)) {
+                        
+                        await Notificacoes.create({
+                            acaoExtensaoId: acaoId,
+                            atividadeId: novaAtividade.id,
+                            userId: membro,
+                            tipo: 'finalizado',
+                            status: 'não Lida',
+                            createdAt: new Date(new Date().getTime() - 3 * 60 * 60 * 1000 + 1000),
+                            updatedAt: new Date(new Date().getTime() - 3 * 60 * 60 * 1000 + 1000),
+                        })
+
+                    }
+
                 }
 
                 res.status(201).json({
@@ -273,9 +287,23 @@ module.exports = {
                             status: 'não Lida',
                             createdAt: new Date(new Date().getTime() - 3 * 60 * 60 * 1000),
                             updatedAt: new Date(new Date().getTime() - 3 * 60 * 60 * 1000),
-                        })
+                        })  
 
                     }
+
+                    if (['cancelada', 'encerrada com antecipação', 'encerrada com pendência'].includes(status)) {
+                        
+                        await Notificacoes.create({
+                            acaoExtensaoId: id_acao,
+                            atividadeId: id,
+                            userId: membro,
+                            tipo: 'finalizado',
+                            status: 'não Lida',
+                            createdAt: new Date(new Date().getTime() - 3 * 60 * 60 * 1000 + 1000),
+                            updatedAt: new Date(new Date().getTime() - 3 * 60 * 60 * 1000 + 1000),
+                        })
+
+                    }  
 
                 }
 
