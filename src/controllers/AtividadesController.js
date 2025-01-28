@@ -98,6 +98,98 @@ module.exports = {
         }
     },
 
+    getRecentes: {
+        handler: async (req, res) => {
+
+            try {
+
+                const { id_user } = req.params;
+
+                const atividades = await AtividadesUsuarios.findAll({
+                    where: { userId: id_user },
+                    include: [{
+                        model: Atividade,
+                        as: 'atividade',
+                        where: {
+                            status: ['aberta', 'em andamento']
+                        }
+                    }],
+                    limit: 4, 
+                    order: [[AtividadesUsuarios.sequelize.literal('atividade.createdAt'), 'DESC']]
+                });
+
+                if (atividades.length > 0) {
+                    const atividadesDetalhadas = [];
+
+                    for (const atividadeUsuario of atividades) {
+                        const atividade = atividadeUsuario.atividade;
+
+                        const mensagens = await HistoricoMensagens.findAll({
+                            where: { idAtividade: atividade.id },
+                            include: [{
+                                model: Usuario,
+                                as: 'usuario',
+                                attributes: ['id', 'nome'],
+                            }]
+                        });
+
+                        const msgs = mensagens.map(msg => ({
+                            id: msg.id,
+                            comentario: msg.comentario,
+                            usuario: msg.usuario,
+                            createdAt: msg.createdAt,
+                        }));
+
+                        const membrosAntigos = await AtividadesUsuarios.findAll({
+                            where: { atividadeId: atividade.id },
+                            include: [{
+                                model: Usuario,
+                                as: 'usuario',
+                                attributes: ['id', 'nome', 'email', 'tipoUsuario', 'status'],
+                            }]
+                        });
+
+                        const membros = await AcaoExtensaoUsuario.findAll({
+                            where: { acaoExtensaoId: atividade.acaoExtensaoId },
+                            include: [{
+                                model: Usuario,
+                                as: 'usuarios',
+                                attributes: ['id', 'nome', 'email', 'tipoUsuario', 'status'],
+                            }]
+                        });
+
+                        const membrosantigos = membrosAntigos.map(membro => ({
+                            id: membro.usuario.id,
+                            nome: membro.usuario.nome,
+                            email: membro.usuario.email,
+                            tipoUsuario: membro.usuario.tipoUsuario,
+                            status: membro.usuario.status
+                        }));
+
+                        const usuarios = membros.map(membro => membro.usuarios)
+                        atividadesDetalhadas.push({
+                            ...atividade.toJSON(),
+                            msgs: msgs,
+                            usuarios: usuarios,
+                            membrosantigos: membrosantigos.map(membro => membro.id),
+                        });
+                    }
+                    res.status(200).json({
+                        atividades: atividadesDetalhadas
+                    });
+                } else {
+                    res.status(200).json({
+                        atividades: []
+                    });
+                }
+
+            } catch (error) {
+                return res.status(500).json({ errors: [{ msg: 'Erro interno do servidor' }] });
+            }
+
+        }
+    },
+
     getAll: {
         handler: async (req, res) => {
 
