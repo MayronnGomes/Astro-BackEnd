@@ -1,11 +1,11 @@
 const db = require("../database");
 const AcaoExtensao = db.AcaoExtensao;
 const AcaoExtensaoUsuarios = db.AcaoExtensaoUsuario;
+const Usuario = db.Usuario;
 
 async function buscarFilhos(parentId, userId) {
     const filhos = await AcaoExtensao.findAll({
         where: { parentId },
-        attributes: ['id', 'nome', 'tipo', 'parentId', 'status'],
     });
 
     const resultado = [];
@@ -20,15 +20,21 @@ async function buscarFilhos(parentId, userId) {
 
         if (relacaoUsuario) {
             const netos = await buscarFilhos(filho.id, userId);
+            const coordenador = await Usuario.findByPk(filho.id_coordenador);
 
             resultado.push({
-                ...filho.dataValues,
+                id: filho.id,
+                nome: filho.nome,
+                tipo: filho.tipo,
+                parentId: filho.parentId,
+                status: filho.status,
+                descricao: filho.descricao,
+                coordenador: coordenador.nome,
                 filhos: netos,
             });
         } else {
             const netos = await AcaoExtensao.findAll({
                 where: { parentId: filho.id },
-                attributes: ['id', 'nome', 'tipo', 'parentId', 'status'],
             });
 
             const netosRelacionados = [];
@@ -39,10 +45,18 @@ async function buscarFilhos(parentId, userId) {
                         acaoExtensaoId: neto.id,
                     },
                 });
+                const coordenador = await Usuario.findByPk(neto.id_coordenador);
 
                 if (relacaoNeto) {
                     netosRelacionados.push({
-                        ...neto.dataValues,
+                        id: neto.id,
+                        nome: neto.nome,
+                        tipo: neto.tipo,
+                        parentId: neto.parentId,
+                        status: neto.status,
+                        descricao: neto.descricao,
+                        coordenador: coordenador.nome,
+                        filhos: [],
                     });
                 }
             }
@@ -79,6 +93,7 @@ module.exports = {
                     const acoesExtensaoDetalhadas = await Promise.all(
                         acoesExtensao.map(async (acaoExtensaoUsuarios) => {
                             const acao = acaoExtensaoUsuarios.acoes;
+                            const coordenador = await Usuario.findByPk(acao.id_coordenador);
 
                             const filhos = await buscarFilhos(acao.id, id_user);
 
@@ -89,6 +104,7 @@ module.exports = {
                                 parentId: acao.parentId,
                                 status: acao.status,
                                 descricao: acao.descricao,
+                                coordenador: coordenador.nome,
                                 filhos,
                             };
                         })
