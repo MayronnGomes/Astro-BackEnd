@@ -19,12 +19,12 @@ routes.get('/atividadesTodas/:id_user', AtividadesController.getAllActivities.ha
 routes.post('/atividades', AtividadesController.create.handler)
 routes.post('/atividadesStatus/:id', AtividadesController.updateStatus.handler)
 routes.post('/atividadeUpdate', AtividadesController.update.handler)
-routes.delete('/atividade/:id:acaoId', AtividadesController.delete.handler);
+routes.delete('/atividade', AtividadesController.delete.handler);
 
 // Rotas de Usuários
 routes.post('/userCreate', UserController.create.handler)
 routes.get('/membros/:id', UserController.getAll.handler);
-routes.delete('/membros/:id:acaoId', UserController.delete.handler);
+routes.delete('/membros', UserController.delete.handler);
 
 // Rotas de Ações de Extensão
 routes.get('/acoesExtensao/:id_user', AcoesExtensaoController.get.handler);

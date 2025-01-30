@@ -6,6 +6,7 @@ const User = db.Usuario;
 const AcaoExtensao = db.AcaoExtensao;
 const AcaoExtensaoUsuario = db.AcaoExtensaoUsuario;
 const Notificacoes = db.Notificacoes;
+const { sendMailNotificationAdicionado, sendMailNotificationRemovido } = require('../config/mailer');
 
 module.exports = {
 
@@ -65,6 +66,8 @@ module.exports = {
                     where: { email }
                 })
 
+                const acaoExtensao = await AcaoExtensao.findByPk(acaoId);
+
                 if (usuarioExists) {
 
                     const usuarioInAcao = await AcaoExtensaoUsuario.findOne({
@@ -89,6 +92,8 @@ module.exports = {
                         createdAt: new Date(new Date().getTime() - 3 * 60 * 60 * 1000),
                         updatedAt: new Date(new Date().getTime() - 3 * 60 * 60 * 1000),
                     })
+
+                    await sendMailNotificationAdicionado(usuarioExists.email, usuarioExists.nome, acaoExtensao.nome);
 
                     return res.status(200).json({ msg: 'Usuário adicionado a Ação com sucesso!' });
                 }
@@ -120,6 +125,8 @@ module.exports = {
                     updatedAt: new Date(new Date().getTime() - 3 * 60 * 60 * 1000),
                 })
 
+                await sendMailNotificationAdicionado(novoUsuario.email, novoUsuario.nome, acaoExtensao.nome);
+
                 res.status(201).json({
                     msg: 'Usuário cadastrado com sucesso!',
                 });
@@ -137,7 +144,7 @@ module.exports = {
 
             try {
 
-                const { id, acaoId } = req.params;
+                const { id, acaoId, userSender } = req.body;
 
                 const user = await User.findByPk(id);
 
@@ -178,6 +185,8 @@ module.exports = {
                     createdAt: new Date(new Date().getTime() - 3 * 60 * 60 * 1000),
                     updatedAt: new Date(new Date().getTime() - 3 * 60 * 60 * 1000),
                 })
+
+                await sendMailNotificationRemovido(user.email, user.nome, acao.nome, userSender);
 
                 res.status(200).json({
                     msg: 'Usuário excluído com sucesso!'

@@ -1,10 +1,12 @@
 const db = require("../database");
 const Atividade = db.Atividade;
+const AçãoExtensão = db.AcaoExtensao;
 const AtividadesUsuarios = db.AtividadesUsuario;
 const Notificacoes = db.Notificacoes;
 const Usuario = db.Usuario;
 const AcaoExtensaoUsuario = db.AcaoExtensaoUsuario;
 const HistoricoMensagens = db.HistoricoMensagens;
+const { sendMailNotificationCriado, sendMailNotificationFinalizado, sendMailNotificationRetirado, sendMailNotificationDeletado } = require('../config/mailer')
 
 module.exports = {
 
@@ -114,7 +116,7 @@ module.exports = {
                             status: ['aberta', 'em andamento']
                         }
                     }],
-                    limit: 4, 
+                    limit: 4,
                     order: [[AtividadesUsuarios.sequelize.literal('atividade.createdAt'), 'DESC']]
                 });
 
@@ -278,10 +280,10 @@ module.exports = {
                         as: 'atividade',
                     }]
                 });
-                
+
                 if (atividadesUsuarios.length > 0) {
                     const atividadesComMembros = [];
-                    
+
                     for (const atividadeUsuario of atividadesUsuarios) {
 
                         const atividade = atividadeUsuario.atividade;
@@ -296,7 +298,7 @@ module.exports = {
                                 attributes: ['id', 'nome', 'email', 'tipoUsuario', 'status'],
                             }]
                         });
-                        
+
                         const membros = await AcaoExtensaoUsuario.findAll({
                             where: { acaoExtensaoId: atividade.acaoExtensaoId },
                             include: [{
@@ -351,7 +353,7 @@ module.exports = {
         handler: async (req, res) => {
 
             try {
-                const { nome, descricao, tempoDuracao, dataInicio, dataFim, local, status, membros, acaoId } = req.body;
+                const { nome, descricao, tempoDuracao, dataInicio, dataFim, local, status, membros, acaoId, userSender } = req.body;
 
                 if (!nome || !descricao || !tempoDuracao || !dataInicio || !dataFim || !local || !status || !acaoId || !membros) {
                     return res.status(400).json({ errors: [{ msg: 'Todos os campos são obrigatórios' }] });
@@ -370,6 +372,8 @@ module.exports = {
                     updatedAt: new Date(),
                 });
 
+                const acaoExtensao = await AçãoExtensão.findByPk(acaoId);
+
                 for (const membro of membros) {
                     await AtividadesUsuarios.create({
                         userId: membro,
@@ -386,8 +390,11 @@ module.exports = {
                         updatedAt: new Date(new Date().getTime() - 3 * 60 * 60 * 1000),
                     })
 
+                    const user = await Usuario.findByPk(membro);
+                    await sendMailNotificationCriado(user.email, novaAtividade, user.nome, acaoExtensao.nome, userSender);
+
                     if (['cancelada', 'encerrada com antecipação', 'encerrada com pendência'].includes(novaAtividade.status)) {
-                        
+
                         await Notificacoes.create({
                             acaoExtensaoId: acaoId,
                             atividadeId: novaAtividade.id,
@@ -397,6 +404,8 @@ module.exports = {
                             createdAt: new Date(new Date().getTime() - 3 * 60 * 60 * 1000 + 1000),
                             updatedAt: new Date(new Date().getTime() - 3 * 60 * 60 * 1000 + 1000),
                         })
+
+                        await sendMailNotificationFinalizado(user.email, novaAtividade.nome, user.nome, acaoExtensao.nome, userSender, novaAtividade.status);
 
                     }
 
@@ -418,7 +427,7 @@ module.exports = {
         handler: async (req, res) => {
 
             try {
-                const { id, nome, descricao, tempoDuracao, dataInicio, dataFim, local, status, membros, id_acao } = req.body;
+                const { id, nome, descricao, tempoDuracao, dataInicio, dataFim, local, status, membros, id_acao, userSender } = req.body;
                 if (!id || !nome || !descricao || !tempoDuracao || !dataInicio || !dataFim || !local || !status || !membros || !id_acao) {
                     return res.status(400).json({ errors: [{ msg: 'Todos os campos são obrigatórios' }] });
                 }
@@ -437,6 +446,13 @@ module.exports = {
                         where: { id }
                     });
 
+                const atividadeInfo = {
+                    nome: nome,  
+                    local: local, 
+                    status: status,
+                };
+
+                const acaoExtensao = await AçãoExtensão.findByPk(id_acao);
 
                 const membrosAntigos = await AtividadesUsuarios.findAll({
                     where: { atividadeId: id },
@@ -462,12 +478,15 @@ module.exports = {
                             status: 'não Lida',
                             createdAt: new Date(new Date().getTime() - 3 * 60 * 60 * 1000),
                             updatedAt: new Date(new Date().getTime() - 3 * 60 * 60 * 1000),
-                        })  
+                        })
+
+                        const user = await Usuario.findByPk(membro);
+                        await sendMailNotificationCriado(user.email, atividadeInfo, nome, user.nome, acaoExtensao.nome, userSender);
 
                     }
 
                     if (['cancelada', 'encerrada com antecipação', 'encerrada com pendência'].includes(status)) {
-                        
+
                         await Notificacoes.create({
                             acaoExtensaoId: id_acao,
                             atividadeId: id,
@@ -478,7 +497,10 @@ module.exports = {
                             updatedAt: new Date(new Date().getTime() - 3 * 60 * 60 * 1000 + 1000),
                         })
 
-                    }  
+                        const user = await Usuario.findByPk(membro);
+                        await sendMailNotificationFinalizado(user.email, nome, user.nome, acaoExtensao.nome, userSender, status);
+
+                    }
 
                 }
 
@@ -498,6 +520,9 @@ module.exports = {
                             createdAt: new Date(new Date().getTime() - 3 * 60 * 60 * 1000),
                             updatedAt: new Date(new Date().getTime() - 3 * 60 * 60 * 1000),
                         })
+
+                        const user = await Usuario.findByPk(membro);
+                        await sendMailNotificationRetirado(user.email, nome, user.nome, acaoExtensao.nome, userSender);
 
                     }
 
@@ -543,9 +568,11 @@ module.exports = {
 
             try {
 
-                const { id, acaoId } = req.params;
+                const { id, acaoId, userSender } = req.body;
 
                 const atividade = await Atividade.findByPk(id);
+
+                const acaoExtensao = await AçãoExtensão.findByPk(acaoId);
 
                 if (!atividade) {
                     return res.status(404).json({
@@ -578,8 +605,10 @@ module.exports = {
                         updatedAt: new Date(new Date().getTime() - 3 * 60 * 60 * 1000),
                     })
 
-                }
+                    const user = await Usuario.findByPk(membro);
+                    await sendMailNotificationDeletado(user.email, atividade.nome, user.nome, acaoExtensao.nome, userSender);
 
+                }
 
                 res.status(200).json({
                     msg: 'Atividade deletada com sucesso!'
