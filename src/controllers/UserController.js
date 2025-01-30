@@ -6,6 +6,7 @@ const User = db.Usuario;
 const AcaoExtensao = db.AcaoExtensao;
 const AcaoExtensaoUsuario = db.AcaoExtensaoUsuario;
 const Notificacoes = db.Notificacoes;
+const AtividadesUsuarios = db.AtividadesUsuario;
 const { sendMailNotificationAdicionado, sendMailNotificationRemovido } = require('../config/mailer');
 
 module.exports = {
@@ -176,6 +177,12 @@ module.exports = {
                     where: { acaoExtensaoId: acaoId, userId: id }
                 });
 
+                await AtividadesUsuarios.update({
+                    createdAt: new Date(),
+                }, {
+                    where: { userId: id }
+                });
+
                 await Notificacoes.create({
                     acaoExtensaoId: acaoId,
                     atividadeId: null,
@@ -191,6 +198,35 @@ module.exports = {
                 res.status(200).json({
                     msg: 'Usuário excluído com sucesso!'
                 });
+
+            } catch (error) {
+                return res.status(500).json({ errors: [{ msg: 'Erro interno do servidor' }] });
+            }
+
+        }
+    },
+
+    checkTime: {
+        handler: async (req, res) => {
+
+            try {
+
+                const { id, atividadeId } = req.body;
+
+                const AtividadeUsuario = await AtividadesUsuarios.findOne({
+                    where: { atividadeId, userId: id },
+                });
+
+                if (AtividadeUsuario) {
+
+                    res.status(200).json({
+                        excluidoEm: AtividadeUsuario.updatedAt,
+                    });
+                } else {
+                    res.status(200).json({
+                        excluidoEm: []
+                    });
+                }
 
             } catch (error) {
                 return res.status(500).json({ errors: [{ msg: 'Erro interno do servidor' }] });
