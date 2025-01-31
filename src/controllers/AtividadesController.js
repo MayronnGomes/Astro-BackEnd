@@ -393,7 +393,7 @@ module.exports = {
                     const user = await Usuario.findByPk(membro);
                     await sendMailNotificationCriado(user.email, novaAtividade, user.nome, acaoExtensao.nome, userSender);
 
-                    if (['cancelada', 'encerrada com antecipação', 'encerrada com pendência'].includes(novaAtividade.status)) {
+                    if (['cancelada', 'encerrada com antecipação', 'encerrada com pendência', 'concluida'].includes(novaAtividade.status)) {
 
                         await Notificacoes.create({
                             acaoExtensaoId: acaoId,
@@ -485,7 +485,7 @@ module.exports = {
 
                     }
 
-                    if (['cancelada', 'encerrada com antecipação', 'encerrada com pendência'].includes(status)) {
+                    if (['cancelada', 'encerrada com antecipação', 'encerrada com pendência', 'concluida'].includes(status)) {
 
                         await Notificacoes.create({
                             acaoExtensaoId: id_acao,
