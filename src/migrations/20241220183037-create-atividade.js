@@ -15,9 +15,6 @@ module.exports = {
       descricao: {
         type: Sequelize.TEXT
       },
-      tempoDuracao: {
-        type: Sequelize.INTEGER
-      },
       dataInicio: {
         type: Sequelize.DATE
       },

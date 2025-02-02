@@ -39,7 +39,6 @@ module.exports = (sequelize, DataTypes) => {
   Atividade.init({
     nome: DataTypes.STRING,
     descricao: DataTypes.TEXT,
-    tempoDuracao: DataTypes.INTEGER,
     dataInicio: DataTypes.DATE,
     dataFim: DataTypes.DATE,
     local: DataTypes.STRING,

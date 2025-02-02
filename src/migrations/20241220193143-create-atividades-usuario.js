@@ -14,10 +14,13 @@ module.exports = {
       userId: {
         type: Sequelize.INTEGER,
         references: {
-          model: 'Usuarios', 
+          model: 'Usuarios',
           key: 'id',
         },
-        onDelete: 'CASCADE', 
+        onDelete: 'CASCADE',
+      },
+      tempo_gasto: {
+        type: Sequelize.INTEGER,
       },
       createdAt: {
         allowNull: false,

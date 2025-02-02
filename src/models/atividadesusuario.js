@@ -38,7 +38,8 @@ module.exports = (sequelize, DataTypes) => {
         key: 'id',
       },
       allowNull: false,
-    }
+    },
+    tempo_gasto: DataTypes.INTEGER,
   }, {
     sequelize,
     modelName: 'AtividadesUsuario',
