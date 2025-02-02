@@ -353,23 +353,22 @@ module.exports = {
         handler: async (req, res) => {
 
             try {
-                const { nome, descricao, tempoDuracao, dataInicio, dataFim, local, status, membros, acaoId, userSender } = req.body;
+                const { nome, descricao, dataInicio, dataFim, local, status, membros, acaoId, userSender } = req.body;
 
-                if (!nome || !descricao || !tempoDuracao || !dataInicio || !dataFim || !local || !status || !acaoId || !membros) {
+                if (!nome || !descricao || !dataInicio || !dataFim || !local || !status || !acaoId || !membros) {
                     return res.status(400).json({ errors: [{ msg: 'Todos os campos são obrigatórios' }] });
                 }
 
                 const novaAtividade = await Atividade.create({
                     nome,
                     descricao,
-                    tempoDuracao,
-                    dataInicio,
-                    dataFim,
+                    dataInicio: new Date(new Date(dataInicio).getTime() - 3 * 60 * 60 * 1000),
+                    dataFim: new Date(new Date(dataFim).getTime() - 3 * 60 * 60 * 1000),
                     local,
                     status,
                     acaoExtensaoId: acaoId,
-                    createdAt: new Date(),
-                    updatedAt: new Date(),
+                    createdAt: new Date(new Date().getTime() - 3 * 60 * 60 * 1000),
+                    updatedAt: new Date(new Date().getTime() - 3 * 60 * 60 * 1000),
                 });
 
                 const acaoExtensao = await AçãoExtensão.findByPk(acaoId);
@@ -427,8 +426,8 @@ module.exports = {
         handler: async (req, res) => {
 
             try {
-                const { id, nome, descricao, tempoDuracao, dataInicio, dataFim, local, status, membros, id_acao, userSender } = req.body;
-                if (!id || !nome || !descricao || !tempoDuracao || !dataInicio || !dataFim || !local || !status || !membros || !id_acao) {
+                const { id, nome, descricao, dataInicio, dataFim, local, status, membros, id_acao, userSender } = req.body;
+                if (!id || !nome || !descricao || !dataInicio || !dataFim || !local || !status || !membros || !id_acao) {
                     return res.status(400).json({ errors: [{ msg: 'Todos os campos são obrigatórios' }] });
                 }
 
@@ -436,9 +435,8 @@ module.exports = {
                     {
                         nome,
                         descricao,
-                        tempoDuracao,
-                        dataInicio,
-                        dataFim,
+                        dataInicio: new Date(new Date(dataInicio).getTime() - 3 * 60 * 60 * 1000),
+                        dataFim: new Date(new Date(dataFim).getTime() - 3 * 60 * 60 * 1000),
                         local,
                         status,
                     },
@@ -447,8 +445,8 @@ module.exports = {
                     });
 
                 const atividadeInfo = {
-                    nome: nome,  
-                    local: local, 
+                    nome: nome,
+                    local: local,
                     status: status,
                 };
 
@@ -618,6 +616,50 @@ module.exports = {
                 return res.status(500).json({ errors: [{ msg: 'Erro interno do servidor' }] });
             }
 
+        }
+    },
+
+    updateTime: {
+        handler: async (req, res) => {
+
+            try {
+                const { id_user, id_atividade, tempo_gasto } = req.body;
+
+                const resultado = await AtividadesUsuarios.update(
+                    { tempo_gasto },
+                    {
+                        where: { atividadeId: id_atividade, userId: id_user },
+                    }
+                );
+
+                res.status(200).json({
+                    msg: 'Tempo atualizado com Sucesso',
+                });
+            } catch (error) {
+                return res.status(500).json({ errors: [{ msg: 'Erro ao atualizar o Tempo' }] });
+            }
+        }
+    },
+    
+    getTime: {
+        handler: async (req, res) => {
+
+            try {
+                const { id_user, id_atividade } = req.body;
+
+                const resultado = await AtividadesUsuarios.findOne(
+                    {
+                        where: { atividadeId: id_atividade, userId: id_user },
+                    }
+                );
+
+                res.status(200).json({
+                    msg: 'Tempo atualizado com Sucesso',
+                    elapsedTime: resultado.tempo_gasto,
+                });
+            } catch (error) {
+                return res.status(500).json({ errors: [{ msg: 'Erro ao atualizar o Tempo' }] });
+            }
         }
     },
 

@@ -16,9 +16,11 @@ routes.get('/atividades/:id_user:id_acao', AtividadesController.get.handler);
 routes.get('/atividadesCoord/:id_acao', AtividadesController.getAll.handler);
 routes.get('/atividadesRecentes/:id_user', AtividadesController.getRecentes.handler);
 routes.get('/atividadesTodas/:id_user', AtividadesController.getAllActivities.handler);
+routes.post('/getAtividadeTime', AtividadesController.getTime.handler);
 routes.post('/atividades', AtividadesController.create.handler)
 routes.post('/atividadesStatus/:id', AtividadesController.updateStatus.handler)
 routes.post('/atividadeUpdate', AtividadesController.update.handler)
+routes.post('/atividadeTime', AtividadesController.updateTime.handler)
 routes.delete('/atividade', AtividadesController.delete.handler);
 
 // Rotas de Usuários
