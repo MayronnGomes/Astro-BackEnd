@@ -8,7 +8,7 @@ module.exports = {
       {
         id: 1,
         nome: 'Mayronn',
-        email: 'mayronn@gmail.com',
+        email: 'aluno@example.com',
         user: '510006',
         senha: '$2a$08$iSSeKdg.D8BNBt//9FI7iuPXCWmd575feds1JUdfHOXOM1seAvi2u',
         tipoUsuario: 'aluno',
@@ -20,7 +20,7 @@ module.exports = {
       {
         id: 3,
         nome: 'Marina Azevedo',
-        email: 'marina@gmail.com',
+        email: 'coordenadora@example.com',
         user: '0000001',
         senha: '$2a$08$.D8tydI6XLts2B4kZHPJke08xAxdkRBUDg7SvPf6E/o3DJmk93M5S',
         tipoUsuario: 'coordenador',
